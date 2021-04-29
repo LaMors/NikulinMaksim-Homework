@@ -49,6 +49,7 @@ namespace ParserService
             }
 
             partedContent.Add("Text files:");
+            texts.Sort();
             foreach (var text in texts)
             {
                 foreach (var information in text.GetInformation())
@@ -58,6 +59,7 @@ namespace ParserService
             }
 
             partedContent.Add("Movies:");
+            movies.Sort();
             foreach (var movie in movies)
             {
                 foreach (var information in movie.GetInformation())
@@ -67,6 +69,7 @@ namespace ParserService
             }
 
             partedContent.Add("Images:");
+            images.Sort();
             foreach (var image in images)
             {
                 foreach (var information in image.GetInformation())

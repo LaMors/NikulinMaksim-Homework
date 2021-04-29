@@ -9,7 +9,7 @@ namespace ParaserEntities
 
         public override List<string> GetInformation()
         {
-            return new List<string> { Name, "   Extension: " + Extension, "   Siz: " + Size, "   Resolution: " + Resolution };
+            return new List<string> { Name, "   Extension: " + Extension, "   Size: " + Size, "   Resolution: " + Resolution };
         }
     }
 }
