@@ -10,7 +10,12 @@ namespace DI.App.Services.DAL
 {
     public class InDatabaseUserService : IDatabaseService<IUser>
     {
-        private readonly IDatabaseService<IDbEntity> databaseService;
+        private readonly IDatabaseService<IUser> databaseService;
+
+        public InDatabaseUserService(IDatabaseService<IUser> databaseService)
+        {
+            this.databaseService = databaseService;
+        }
 
         public IEnumerable<IUser> Read()
         {
