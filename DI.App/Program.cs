@@ -7,6 +7,7 @@ namespace DI.App
         private static void Main()
         {
             // Inversion of Control
+            // Complite
             var manager = new CommandManager();
 
             manager.Start();
