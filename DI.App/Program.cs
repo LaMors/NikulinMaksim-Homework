@@ -13,10 +13,7 @@ namespace DI.App
         private static void Main()
         {
             // Inversion of Control
-            var users = new Dictionary<int, IDbEntity>();
-            users.Add(1, new User());
-            users.Add(2, new User());
-            var dataService = new InDatabaseUserService(new InMemoryDatabaseService(users));
+            var dataService = new InDatabaseUserService(new InMemoryDatabaseService());
 
             var userStore = new UserStore(dataService);
             var addUsers = new AddUserCommand(userStore);

@@ -1,5 +1,6 @@
 ﻿using DI.App.Abstractions;
 using DI.App.Abstractions.BLL;
+using DI.App.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,29 @@ using System.Threading.Tasks;
 
 namespace DI.App.Services.DAL
 {
-    public class InDatabaseUserService : IDatabaseService<IUser>
+    public class InDatabaseUserService : IDatabaseService<IUser, IDbEntity>
     {
-        private readonly IDatabaseService<IUser> databaseService;
+        private readonly IDatabaseService<IDbEntity, IDbEntity> databaseService;
 
-        public InDatabaseUserService(IDatabaseService<IUser> databaseService)
+        public InDatabaseUserService(IDatabaseService<IDbEntity, IDbEntity> databaseService)
         {
             this.databaseService = databaseService;
         }
 
         public IEnumerable<IUser> Read()
         {
-            return (IEnumerable<IUser>)databaseService.Read();
+            var users = new List<IUser>();
+
+            var entitys = databaseService.Read();
+
+            foreach (var entity in entitys)
+            {
+                users.Add(entity.ToUser());
+            }
+            return users;
         }
 
-        public void Write(params IUser[] data)
+        public void Write(params IDbEntity[] data)
         {
             databaseService.Write(data);
         }

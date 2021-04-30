@@ -5,14 +5,10 @@ using DI.App.Abstractions.BLL;
 
 namespace DI.App.Services
 {
-    public class InMemoryDatabaseService : IDatabaseService<IDbEntity>
+    public class InMemoryDatabaseService : IDatabaseService<IDbEntity, IDbEntity>
     {
-        private readonly Dictionary<int, IDbEntity> inMemoryDatabase;
+        private readonly Dictionary<int, IDbEntity> inMemoryDatabase = new Dictionary<int, IDbEntity>();
 
-        public InMemoryDatabaseService(Dictionary<int, IDbEntity> inMemoryDatabase)
-        {
-            this.inMemoryDatabase = inMemoryDatabase;
-        }
 
         public IEnumerable<IDbEntity> Read() 
             
@@ -23,6 +19,7 @@ namespace DI.App.Services
                 .AsEnumerable();
         }
 
+
         public void Write(params IDbEntity[] data)
         {
             foreach (var entity in data)
@@ -30,5 +27,6 @@ namespace DI.App.Services
                 this.inMemoryDatabase.TryAdd(entity.Id, entity);
             }
         }
+
     }
 }

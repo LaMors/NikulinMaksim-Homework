@@ -7,9 +7,9 @@ namespace DI.App.Services
 {
     public class UserStore : IUserStore
     {
-        private readonly IDatabaseService<IUser> dbService;
+        private readonly IDatabaseService<IUser, IDbEntity> dbService;
 
-        public UserStore(IDatabaseService<IUser> databaseService)
+        public UserStore(IDatabaseService<IUser, IDbEntity> databaseService)
         {
             dbService = databaseService;
         }
