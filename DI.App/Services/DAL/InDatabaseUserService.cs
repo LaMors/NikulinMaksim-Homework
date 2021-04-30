@@ -22,9 +22,9 @@ namespace DI.App.Services.DAL
         {
             var users = new List<IUser>();
 
-            var entitys = databaseService.Read();
+            var entities = databaseService.Read();
 
-            foreach (var entity in entitys)
+            foreach (var entity in entities)
             {
                 users.Add(entity.ToUser());
             }
