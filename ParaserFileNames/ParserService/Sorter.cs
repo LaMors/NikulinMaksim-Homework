@@ -30,7 +30,7 @@ namespace ParserService
             var texts = new List<Text>();
 
 
-
+            //Sorting by type
             foreach (var substring in substrings)
             {
                 var temp = stringParser.Parse(substring);
