@@ -11,7 +11,7 @@ namespace BullsAndCows
         /// <summary>
         /// A collection of all possible answers
         /// </summary>
-        private List<string> ansvers;
+        private List<string> answers;
 
         /// <summary>
         /// Сurrent round counter
@@ -25,7 +25,7 @@ namespace BullsAndCows
 
         public Game()
         {
-            GetAllAnsvers();
+            GetAllAnswers();
 
             currentBullsAndCows = new BullsAndCows()
             {
@@ -33,25 +33,24 @@ namespace BullsAndCows
                 Cows = 0
             };
 
-            Console.WriteLine("\nThink the four-digit number from non-repeating numbers\n");
+            Console.WriteLine("\nThink the four-digit number\n");
         }
 
         /// <summary>
         /// Populates the collection of answers with all possible answers
         /// </summary>
-        private void GetAllAnsvers()
+        private void GetAllAnswers()
         {
-            ansvers = new List<string>();
+            answers = new List<string>();
 
             for (int i = 0; i < 9999; i++)
             {
                 var tempString = i.ToString().PadLeft(4, '0');
-                var tempCharArr = tempString.ToCharArray().Distinct().ToArray();
 
-                if (tempCharArr.Length < 4)
+                if (tempString.Length < 4)
                     continue;
 
-                ansvers.Add(new string(tempCharArr));
+                answers.Add(tempString);
             }
         }
 
@@ -65,14 +64,14 @@ namespace BullsAndCows
 
             Console.WriteLine($"\nRound №{counter}\n");
 
-            var newAnsver = GetOneAnsver();
+            var newAnswer = GetOneAnswer();
 
-            Console.WriteLine($"Answer options left:{ansvers.Count}\n");
-            Console.WriteLine($"I thinks the answer is: {newAnsver}. Yes or no?\n");
+            Console.WriteLine($"Answer options left:{answers.Count}\n");
+            Console.WriteLine($"I thinks the answer is: {newAnswer}. Yes or no?\n");
 
-            var playerAnsver = Asking();
+            var playerAnswer = Asking();
 
-            if (playerAnsver.ToLower() == "no")
+            if (playerAnswer.ToLower() == "no")
             {
                 Console.WriteLine($"\nHow many bulls?\n");
                 var bulls = Console.ReadLine();
@@ -86,7 +85,7 @@ namespace BullsAndCows
                     Cows = Convert.ToInt32(cows)
                 };
 
-                DeleteBadAnsvers(newAnsver);
+                DeleteBadAnswers(newAnswer);
 
                 return true;
             }
@@ -105,16 +104,16 @@ namespace BullsAndCows
         /// <returns></returns>
         private string Asking()
         {
-            var playerAnsver = Console.ReadLine();
+            var playerAnswer = Console.ReadLine();
 
-            while (playerAnsver.ToLower() != "yes" && playerAnsver.ToLower() != "no")
+            while (playerAnswer.ToLower() != "yes" && playerAnswer.ToLower() != "no")
             {
                 Console.WriteLine($"\nSay \"yes\" or \"no\"\n");
 
-                playerAnsver = Console.ReadLine();
+                playerAnswer = Console.ReadLine();
             }
 
-            return playerAnsver;
+            return playerAnswer;
         }
 
         /// <summary>
@@ -146,17 +145,17 @@ namespace BullsAndCows
         /// <summary>
         /// Removes all impossible choices from the answer collection.
         /// </summary>
-        /// <param name="currentAnsver"></param>
-        private void DeleteBadAnsvers(string currentAnsver)
+        /// <param name="currentAnswer"></param>
+        private void DeleteBadAnswers(string currentAnswer)
         {
-            var tempAnsvers = new List<string>(ansvers);
+            var tempAnswers = new List<string>(answers);
 
-            foreach (var ansver in tempAnsvers)
+            foreach (var answer in tempAnswers)
             {
-                var newBullsAndCows = GetQuantityBullsAndCows(ansver, currentAnsver);
+                var newBullsAndCows = GetQuantityBullsAndCows(answer, currentAnswer);
 
                 if (!currentBullsAndCows.Equals(newBullsAndCows))
-                    ansvers.Remove(ansver);
+                    answers.Remove(answer);
 
             }
         }
@@ -164,15 +163,15 @@ namespace BullsAndCows
         /// <summary>
         /// Gets a "price" that indicates how profitable the intended answer is.
         /// </summary>
-        /// <param name="supposedAnsver"></param>
+        /// <param name="supposedAnswer"></param>
         /// <returns></returns>
-        private int GetMovePrice(string supposedAnsver)
+        private int GetMovePrice(string supposedAnswer)
         {
             var price = 0;
 
-            foreach (var ansver in ansvers)
+            foreach (var answer in answers)
             {
-                var newBullsAndCows = GetQuantityBullsAndCows(ansver, supposedAnsver);
+                var newBullsAndCows = GetQuantityBullsAndCows(answer, supposedAnswer);
 
                 if (!currentBullsAndCows.Equals(newBullsAndCows))
                     price++;
@@ -185,20 +184,20 @@ namespace BullsAndCows
         /// Chooses one answer based on "price".
         /// </summary>
         /// <returns></returns>
-        private string GetOneAnsver()
+        private string GetOneAnswer()
         {
-            var maxPrice = ansvers.
-                Select(ans => new { ansver = ans, price = GetMovePrice(ans) }).
+            var answer = answers.
+                Select(ans => new { answer = ans, price = GetMovePrice(ans) }).
                 OrderBy(ans => ans.price).
-                First().price;
+                First().answer;
 
-            var optimalAnsvers = ansvers.
-                Select(ans => new { ansver = ans, price = GetMovePrice(ans) }).
-                Where(asn => asn.price == maxPrice).ToList();
+            //var optimalAnswers = answers.
+            //    Select(ans => new { answer = ans, price = GetMovePrice(ans) }).
+            //    Where(asn => asn.price == maxPrice).ToList();
 
-            var ansver = optimalAnsvers[new Random().Next(0, optimalAnsvers.Count)].ansver;
+            //var answer = optimalAnswers[0].answer;
 
-            return ansver;
+            return answer;
         }
     }
 }
