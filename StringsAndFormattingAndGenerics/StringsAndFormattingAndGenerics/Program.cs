@@ -9,7 +9,6 @@ namespace StringsAndFormattingAndGenerics
     {
         static void Main(string[] args)
         {
-
         }
 
         public static void PrintOnlyNums(string stringWithNumbers)
@@ -100,6 +99,48 @@ namespace StringsAndFormattingAndGenerics
             Console.WriteLine(sumResult);
         }
 
+        public static void RegLettersPlusNumbers()
+        {
+            var listString = new List<string>() { "asd(@123", "sd1234", "2312jasd", "sdw87awed", "as123" };
+            var reg = new Regex(@"^[a-zA-Z]*[0-9]*$");
+
+            foreach (var subString in listString)
+            {
+                if (reg.IsMatch(subString))
+                {
+                    Console.WriteLine(subString);
+                }
+            }
+        }
+
+        public static bool PasswordValidator(string password)
+        {
+            var reg = new Regex(@"((?=.*d)(?=.*[a-z])(?=.*[A-Z]).{6})");
+
+            return reg.IsMatch(password);
+
+        }
+
+        public static bool PostCodeValidator(string postCode)
+        {
+            var reg = new Regex(@"^[[0-9]{3}[-]{1}[0-9]{3}$");
+
+            return reg.IsMatch(postCode);
+        }
+
+        public static string NumberHider(string textWithNubers)
+        {
+            var reg = new Regex(@"[+]{1}[0-9]{3}[-]{1}[0-9]{2}[-]{1}[0-9]{3}[-]{1}[0-9]{2}[-]{1}[0-9]{2}");
+
+            var matches = reg.Matches(textWithNubers);
+
+            foreach (var match in matches)
+            {
+                textWithNubers = textWithNubers.Replace(match.ToString(), "+XXX-XX-XXX-XX-XX");
+            }
+           return textWithNubers;
+        }
+
         public static void CapitalizeFirstLetter()
         {
             var NamesAndSurnames = new List<string>() { "иван иванов", "светлана иванова-петренко" };
@@ -129,5 +170,7 @@ namespace StringsAndFormattingAndGenerics
 
             Console.WriteLine(System.Text.Encoding.UTF8.GetString(base64));
         }
+
+
     }
 }
