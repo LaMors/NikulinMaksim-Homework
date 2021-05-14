@@ -26,7 +26,7 @@ namespace CollectionsAndLinq
             if (firstDate > secondDate)
             {
                 return customers.Where(customer => customer.RegistrationDate <= firstDate && customer.RegistrationDate >= secondDate)
-                                        .OrderByDescending(customer => customer.RegistrationDate);
+                                        .OrderBy(customer => customer.RegistrationDate);
             }
             return customers.Where(customer => customer.RegistrationDate >= firstDate && customer.RegistrationDate <= secondDate)
                                         .OrderBy(customer => customer.RegistrationDate);
