@@ -64,7 +64,12 @@ namespace BullsAndCows
 
             Console.WriteLine($"\nRound №{counter}\n");
 
-            var newAnswer = GetOneAnswer();
+            string newAnswer;
+            if (counter == 1)
+                newAnswer = GetRandomAnswer();
+
+            else
+                newAnswer = GetOneAnswer();
 
             Console.WriteLine($"Answer options left:{answers.Count}\n");
             Console.WriteLine($"I thinks the answer is: {newAnswer}. Yes or no?\n");
@@ -97,6 +102,9 @@ namespace BullsAndCows
             }
         }
 
+        private string GetRandomAnswer() => answers[new Random().Next(0, answers.Count)];
+
+
         /// <summary>
         /// Ask the user if he thought of this number?
         /// </summary>
@@ -122,22 +130,45 @@ namespace BullsAndCows
         /// <param name="firstNumber"></param>
         /// <param name="secondNumber"></param>
         /// <returns></returns>
-        private BullsAndCows GetQuantityBullsAndCows(string firstNumber, string secondNumber)
+        public BullsAndCows GetQuantityBullsAndCows(string firstNumber, string secondNumber)
         {
             var bullsAndCows = new BullsAndCows() { Bulls = 0, Cows = 0 };
 
+            var tempSecond = secondNumber;
+
+            var tempFirst = firstNumber;
+
+
             for (int i = 0; i < firstNumber.Length; i++)
             {
-
                 if (secondNumber.Contains(firstNumber[i]))
                 {
                     if (firstNumber[i] == secondNumber[i])
-                        bullsAndCows.Bulls++;
+                    {
+                        var temp1 = tempFirst.ToCharArray().ToList();
+                        temp1.RemoveAt(temp1.IndexOf(firstNumber[i]));
 
-                    else
-                        bullsAndCows.Cows++;
+                        var temp2 = tempSecond.ToCharArray().ToList();
+                        temp2.RemoveAt(temp2.IndexOf(firstNumber[i]));
+
+                        tempFirst = new string(temp1.ToArray());
+
+                        tempSecond = new string(temp2.ToArray());
+
+                        bullsAndCows.Bulls++;
+                    }
                 }
             }
+
+            for (int i = 0; i < tempFirst.Length; i++)
+            {
+                if (tempFirst.Contains(tempSecond[i]))
+                {
+                    bullsAndCows.Cows++;
+                }
+            }
+
+
 
             return bullsAndCows;
         }
@@ -167,17 +198,22 @@ namespace BullsAndCows
         /// <returns></returns>
         private int GetMovePrice(string supposedAnswer)
         {
-            var price = 0;
+            var priceBulls = 0;
+
+            var priceCows = 0;
 
             foreach (var answer in answers)
             {
                 var newBullsAndCows = GetQuantityBullsAndCows(answer, supposedAnswer);
 
-                if (!currentBullsAndCows.Equals(newBullsAndCows))
-                    price++;
+                if (currentBullsAndCows.Bulls == currentBullsAndCows.Bulls)
+                    priceBulls++;
+
+                if (currentBullsAndCows.Cows == currentBullsAndCows.Cows)
+                    priceCows++;
             }
 
-            return price;
+            return priceBulls*10 + priceCows;
         }
 
         /// <summary>
@@ -186,18 +222,25 @@ namespace BullsAndCows
         /// <returns></returns>
         private string GetOneAnswer()
         {
+            if (answers.Count == 1)
+                return answers[0];
+
+            var tempAnswers = new List<string>(answers);
+
             var answer = answers.
-                Select(ans => new { answer = ans, price = GetMovePrice(ans) }).
-                OrderBy(ans => ans.price).
+                Select(ans => new { answer = ans, price = GetMovePrice(ans), rep = RepetitionsNumber(ans)}).
+                OrderBy(ans => ans.price).ThenByDescending(ans => ans.rep).
                 First().answer;
 
-            //var optimalAnswers = answers.
-            //    Select(ans => new { answer = ans, price = GetMovePrice(ans) }).
-            //    Where(asn => asn.price == maxPrice).ToList();
-
-            //var answer = optimalAnswers[0].answer;
-
             return answer;
+        }
+
+        public int RepetitionsNumber(string str)
+        {
+            var tempCharArr = str.ToCharArray().Distinct().ToArray();
+
+            var count = new string(tempCharArr).Length;
+            return count;
         }
     }
 }
